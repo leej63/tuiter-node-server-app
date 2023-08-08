@@ -35,13 +35,22 @@ const AuthController = (app) => {
     res.json(currentUser); 
  };
 
- const logout = (req, res) => {
+ const logout = async (req, res) => {
     req.session.destroy();
     res.sendStatus(200);
+    return;
  };
 
  const update = (req, res) => {
-
+    const currentUser = req.session["currentUser"];
+    if (!currentUser) {
+      res.sendStatus(404);
+      return;
+    }
+    const newUser = usersDao.updateUser(currentUser._id, req.body);
+    req.session["currentUser"] = newUser;
+    res.json(newUser);
+    // implement here
  };
 
  app.post("/api/users/register", register);
