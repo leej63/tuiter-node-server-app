@@ -1,4 +1,4 @@
-let users = [];
+import users from './users.js';
 
 
 export const findAllUsers = () => users;
@@ -10,6 +10,11 @@ export const findUserById = (uid) => {
  return null;
 };
 
+export const findUserByIndex = (uid) => {
+    if (uid - 1 !== -1) return null;
+    const index = users[uid - 1];
+    return index;
+};
 
 export const findUserByUsername = (username) => {
  const index = users.findIndex((u) => u.username === username);
@@ -25,7 +30,7 @@ export const findUserByCredentials = (username, password) => {
 };
 
 
-export const createUser = (user) => users.push(user);
+export const createUser = (user) => {const index = users.push(user); return user;}
 
 
 export const updateUser = (uid, user) => {
