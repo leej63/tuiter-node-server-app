@@ -26,5 +26,5 @@ export const createUser = (user) =>
 export const updateUser = (id, user) =>
     usersModel.updateOne({ _id: id }, { $set: user });
 
-export const deleteUser = (uid) =>
+export const deleteUser = (id) =>
     usersModel.deleteOne({ _id: id });

@@ -11,7 +11,7 @@ const AuthController = (app) => {
       return;
     }
     // const newUser = usersDao.createUser(req.body);
-    const newUser = await userDao.createUser(req.body);
+    const newUser = await usersDao.createUser(req.body);
     req.session["currentUser"] = newUser;
     res.json(newUser); 
  };
@@ -48,15 +48,25 @@ const AuthController = (app) => {
     return;
  };
 
- const update = (req, res) => {
+ const update = async (req, res) => {
+    // const currentUser = req.session["currentUser"];
+    // if (!currentUser) {
+    //   res.sendStatus(404);
+    //   return;
+    // }
+    // const newUser = usersDao.updateUser(currentUser._id, req.body);
+    // req.session["currentUser"] = newUser;
+    // res.json(newUser);
     const currentUser = req.session["currentUser"];
-    if (!currentUser) {
-      res.sendStatus(404);
-      return;
+    if (currentUser === undefined) {
+      res.sendStatus(401);
     }
-    const newUser = usersDao.updateUser(currentUser._id, req.body);
-    req.session["currentUser"] = newUser;
-    res.json(newUser);
+    let response = await usersDao.updateUser(req.body);
+    if (response.status === "ok") {
+      res.json(response.user);
+    } else {
+      res.sendStatus(500);
+    }
  };
 
  app.post("/api/users/register", register);
